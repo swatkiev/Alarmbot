@@ -1,30 +1,34 @@
-import requests
+import http.client
 import json
 import surrogates
 import telebot
 
 TOKEN = "PUT HERE YOUR TOKEN FROM BOTFATHER"
+
 bot = telebot.TeleBot(TOKEN)
 
 users = []
 
-headers = {
-    'X-API-Key': 'foo',
-}
+conn = http.client.HTTPConnection("ubilling.net.ua")
 
-ALARM_API = "http://127.0.0.1:10101/api/states/25"
+conn.request("GET", "/aerialalerts/")
 
-response = requests.get(ALARM_API, headers=headers)
+res = conn.getresponse()
 
-response1 = response.json()
+responce = res.read()
 
-response2 = response1['state']
+responce1 = json.loads(responce)
 
-newresponce = response2['alert']
+responce2 = responce1['states']
+
+responce3 = responce2['м. Київ']
+
+newresponce = responce3['alertnow']
 
 responcefile = 'responce.data'
 
 emojigreen = (surrogates.decode('\uD83D\uDFE2'))
+
 emojired = (surrogates.decode('\uD83D\uDD34'))
 
 @bot.message_handler(commands=['start'])
