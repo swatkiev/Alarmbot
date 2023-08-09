@@ -1,6 +1,6 @@
 # Alarmbot - бот, що сповіщає про повітряну тривогу
 
-Мінімальна версія Python для корректної роботи бота необхідна 3.7 або вище!
+Виконайте послідовно команди, знаходячись в директорії з Dockerfile: "docker build -t alarmbot ." і "docker run --name alarmbot --restart="always" -d alarmbot"
 
 В якості джерела даних було використано -> http://ubilling.net.ua/aerialalerts/
 

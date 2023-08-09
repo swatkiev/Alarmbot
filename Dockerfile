@@ -1,6 +1,6 @@
-FROM python:3.8-alpine
+FROM python:3.9-alpine
 
-RUN pip install requests && pip install pyTelegramBotAPI && pip install surrogates
+RUN pip install python_http_client && pip install pyTelegramBotAPI && pip install surrogates
 
 WORKDIR /opt/alarmbot
 
