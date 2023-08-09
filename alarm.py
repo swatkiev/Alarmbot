@@ -15,15 +15,11 @@ conn.request("GET", "/aerialalerts/")
 
 res = conn.getresponse()
 
-responce = res.read()
+data = res.read()
 
-responce1 = json.loads(responce)
+responce = json.loads(data)
 
-responce2 = responce1['states']
-
-responce3 = responce2['м. Київ']
-
-newresponce = responce3['alertnow']
+newresponce = (responce['states']['м. Київ']['alertnow'])
 
 responcefile = 'responce.data'
 
