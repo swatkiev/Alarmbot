@@ -4,7 +4,9 @@
 
 В якості джерела даних було використано -> http://ubilling.net.ua/aerialalerts/
 
-Для оновлення даних використовується модуль Telethon у файлі client.py -> https://github.com/LonamiWebs/Telethon
+Для оновлення даних (кожні 10 сек) використовується модуль Telethon у файлі client.py -> https://github.com/LonamiWebs/Telethon
+
+Файл client.py необхідно додати на виконання у crontab з такими параметрами -> * * * * * /path/to/client.py
 
 Для роботи з запитами до телеграму використовуються модулі http.client та telebot
 

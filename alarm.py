@@ -9,18 +9,6 @@ bot = telebot.TeleBot(TOKEN)
 
 users = []
 
-conn = http.client.HTTPConnection("ubilling.net.ua")
-
-conn.request("GET", "/aerialalerts/")
-
-res = conn.getresponse()
-
-data = res.read()
-
-responce = json.loads(data)
-
-newresponce = (responce['states']['м. Київ']['alertnow'])
-
 responcefile = 'responce.data'
 
 emojigreen = (surrogates.decode('\uD83D\uDFE2'))
@@ -35,19 +23,36 @@ def start_message(msg):
 
 @bot.message_handler(commands=['renew'])
 def alarm(msg):
+    conn = http.client.HTTPConnection("ubilling.net.ua")
+    conn.request("GET", "/aerialalerts/")
+    res = conn.getresponse()
+    data = res.read()
+    responce = json.loads(data)
+    newresponce = (responce['states']['м. Київ']["alertnow"])
     with open(responcefile, 'r') as fl:
         oldresponce = json.load(fl)
     if (newresponce != oldresponce and newresponce == False):
-        oldresponce = newresponce
         with open(responcefile, 'w') as fl:
-            json.dump(oldresponce, fl)
+            json.dump(newresponce, fl)
         for id in users: # for every user that has start the bot
-            bot.send_message(id, "{} Відбій повітряної тривоги Київ".format(emojigreen))
+            bot.send_message(id, "{} Відбій повітряної тривоги Київ".format(emojigreen2))
     elif (newresponce != oldresponce and newresponce == True):
-          oldresponce = newresponce
           with open(responcefile, 'w') as fl:
-              json.dump(oldresponce, fl)
+              json.dump(newresponce, fl)
           for id in users: # for every user that has start the bot
-              bot.send_message(id, "{} Повітряна тривога Київ".format(emojired))
+              bot.send_message(id, "{} Повітряна тривога Київ".format(emojired2))
+
+@bot.message_handler(commands=['check'])
+def check(msg):
+    conn = http.client.HTTPConnection("ubilling.net.ua")
+    conn.request("GET", "/aerialalerts/")
+    res = conn.getresponse()
+    data = res.read()
+    responce = json.loads(data)
+    newresponce = (responce['states']['м. Київ']["alertnow"])
+    if newresponce == False:
+        bot.send_message(msg.chat.id, "{} Зараз немає повітряної тривоги Київ".format(emojigreen2))
+    elif newresponce == True:
+        bot.send_message(msg.chat.id, "{} Зараз повітряна тривога Київ".format(emojired2))
 
 bot.polling()
