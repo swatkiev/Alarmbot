@@ -35,12 +35,12 @@ def alarm(msg):
         with open(responcefile, 'w') as fl:
             json.dump(newresponce, fl)
         for id in users: # for every user that has start the bot
-            bot.send_message(id, "{} Відбій повітряної тривоги Київ".format(emojigreen2))
+            bot.send_message(id, "{} Відбій повітряної тривоги Київ".format(emojigreen))
     elif (newresponce != oldresponce and newresponce == True):
           with open(responcefile, 'w') as fl:
               json.dump(newresponce, fl)
           for id in users: # for every user that has start the bot
-              bot.send_message(id, "{} Повітряна тривога Київ".format(emojired2))
+              bot.send_message(id, "{} Повітряна тривога Київ".format(emojired))
 
 @bot.message_handler(commands=['check'])
 def check(msg):
@@ -51,8 +51,8 @@ def check(msg):
     responce = json.loads(data)
     newresponce = (responce['states']['м. Київ']["alertnow"])
     if newresponce == False:
-        bot.send_message(msg.chat.id, "{} Зараз немає повітряної тривоги Київ".format(emojigreen2))
+        bot.send_message(msg.chat.id, "{} Зараз немає повітряної тривоги Київ".format(emojigreen))
     elif newresponce == True:
-        bot.send_message(msg.chat.id, "{} Зараз повітряна тривога Київ".format(emojired2))
+        bot.send_message(msg.chat.id, "{} Зараз повітряна тривога Київ".format(emojired))
 
 bot.polling()
