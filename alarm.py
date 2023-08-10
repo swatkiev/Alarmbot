@@ -28,7 +28,7 @@ def alarm(msg):
     res = conn.getresponse()
     data = res.read()
     responce = json.loads(data)
-    newresponce = (responce['states']['м. Київ']["alertnow"])
+    newresponce = (responce['states']['м. Київ']['alertnow'])
     with open(responcefile, 'r') as fl:
         oldresponce = json.load(fl)
     if (newresponce != oldresponce and newresponce == False):
@@ -49,7 +49,7 @@ def check(msg):
     res = conn.getresponse()
     data = res.read()
     responce = json.loads(data)
-    newresponce = (responce['states']['м. Київ']["alertnow"])
+    newresponce = (responce['states']['м. Київ']['alertnow'])
     if newresponce == False:
         bot.send_message(msg.chat.id, "{} Зараз немає повітряної тривоги Київ".format(emojigreen))
     elif newresponce == True:
