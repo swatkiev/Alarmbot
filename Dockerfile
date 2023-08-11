@@ -8,4 +8,6 @@ COPY alarm.py /opt/alarmbot
 
 COPY responce.data /opt/alarmbot
 
+COPY users.data /opt/alarmbot
+
 CMD ["python", "alarm.py"]

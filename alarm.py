@@ -7,7 +7,7 @@ TOKEN = "PUT HERE YOUR TOKEN FROM BOTFATHER"
 
 bot = telebot.TeleBot(TOKEN)
 
-users = []
+userdata = 'users.data'
 
 responcefile = 'responce.data'
 
@@ -17,13 +17,19 @@ emojired = (surrogates.decode('\uD83D\uDD34'))
 
 @bot.message_handler(commands=['start'])
 def start_message(msg):
+    with open(userdata, 'r') as fl:
+        users = json.load(fl)
     bot.send_message(msg.chat.id, 'Привіт! Цей бот сповіщає про повітряну тривогу у м. Київ')
     if msg.chat.id not in users: # if the id isn't already in the users list
         users.append(msg.chat.id)
+        with open(userdata, 'w') as fl:
+            json.dump(users, fl)
 
 @bot.message_handler(commands=['renew'])
 def alarm(msg):
     try:
+        with open(userdata, 'r') as fl2:
+            users = json.load(fl2)
         conn = http.client.HTTPConnection("ubilling.net.ua")
         conn.request("GET", "/aerialalerts/")
         res = conn.getresponse()
