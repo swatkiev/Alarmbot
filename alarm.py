@@ -23,24 +23,27 @@ def start_message(msg):
 
 @bot.message_handler(commands=['renew'])
 def alarm(msg):
-    conn = http.client.HTTPConnection("ubilling.net.ua")
-    conn.request("GET", "/aerialalerts/")
-    res = conn.getresponse()
-    data = res.read()
-    responce = json.loads(data)
-    newresponce = (responce['states']['м. Київ']['alertnow'])
-    with open(responcefile, 'r') as fl:
-        oldresponce = json.load(fl)
-    if (newresponce != oldresponce and newresponce == False):
-        with open(responcefile, 'w') as fl:
-            json.dump(newresponce, fl)
-        for id in users: # for every user that has start the bot
-            bot.send_message(id, "{} Відбій повітряної тривоги Київ".format(emojigreen))
-    elif (newresponce != oldresponce and newresponce == True):
-          with open(responcefile, 'w') as fl:
-              json.dump(newresponce, fl)
-          for id in users: # for every user that has start the bot
-              bot.send_message(id, "{} Повітряна тривога Київ".format(emojired))
+    try:
+        conn = http.client.HTTPConnection("ubilling.net.ua")
+        conn.request("GET", "/aerialalerts/")
+        res = conn.getresponse()
+        data = res.read()
+        responce = json.loads(data)
+        newresponce = (responce['states']['м. Київ']['alertnow'])
+        with open(responcefile, 'r') as fl:
+            oldresponce = json.load(fl)
+        if (newresponce != oldresponce and newresponce == False):
+            with open(responcefile, 'w') as fl:
+                json.dump(newresponce, fl)
+            for id in users: # for every user that has start the bot
+                bot.send_message(id, "{} Відбій повітряної тривоги Київ".format(emojigreen))
+        elif (newresponce != oldresponce and newresponce == True):
+              with open(responcefile, 'w') as fl:
+                  json.dump(newresponce, fl)
+              for id in users: # for every user that has start the bot
+                  bot.send_message(id, "{} Повітряна тривога Київ".format(emojired))
+    except http.client.HTTPException as e:
+        bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(e))
 
 @bot.message_handler(commands=['check'])
 def check(msg):
