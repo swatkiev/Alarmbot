@@ -4,10 +4,6 @@ RUN pip install python_http_client && pip install pyTelegramBotAPI && pip instal
 
 WORKDIR /opt/alarmbot
 
-COPY alarm.py /opt/alarmbot
-
-COPY responce.data /opt/alarmbot
-
-COPY users.data /opt/alarmbot
+COPY alarm.py responce.data users.data /opt/alarmbot
 
 CMD ["python", "alarm.py"]

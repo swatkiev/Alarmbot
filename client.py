@@ -7,6 +7,6 @@ api_hash = 'PUT HERE YOUR API_HASH FROM API TELEGRAM'
 client = TelegramClient('your_sesion_name', api_id, api_hash)
 client.start()
 
-for number in range(5):
+for i in range(4):
     client.send_message('@your_bot_name', '/renew')
     time.sleep(10)
