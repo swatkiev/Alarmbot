@@ -2,6 +2,7 @@ import http.client
 import json
 import surrogates
 import telebot
+import socket
 
 TOKEN = "PUT HERE YOUR TOKEN FROM BOTFATHER"
 
@@ -50,6 +51,8 @@ def alarm(msg):
                   bot.send_message(id, "{} Повітряна тривога Київ".format(emojired))
     except http.client.HTTPException as e:
         bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(e))
+    except socket.timeout as t:
+        bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(t))
 
 @bot.message_handler(commands=['check'])
 def check(msg):
