@@ -67,4 +67,16 @@ def check(msg):
     elif newresponce == True:
         bot.send_message(msg.chat.id, "{} Зараз повітряна тривога Київ".format(emojired))
 
+@bot.message_handler(commands=['unsub'])
+def unsub(msg):
+    try:
+        with open(userdata, 'r') as fl:
+            users = json.load(fl)
+        users.remove(msg.chat.id)
+        bot.send_message(msg.chat.id, "Ви успішно відписалися від сповіщень бота")
+        with open(userdata, 'w') as fl:
+            json.dump(users, fl)
+    except ValueError:
+        bot.send_message(msg.chat.id, "Ви вже відписалися від бота")
+
 bot.polling()
