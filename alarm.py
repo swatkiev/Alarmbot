@@ -3,6 +3,8 @@ import json
 import surrogates
 import telebot
 import socket
+from telebot.apihelper import ApiTelegramException
+from json.decoder import JSONDecodeError
 
 TOKEN = "PUT HERE YOUR TOKEN FROM BOTFATHER"
 
@@ -53,6 +55,11 @@ def alarm(msg):
         bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(e))
     except socket.timeout as t:
         bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(t))
+    except ApiTelegramException as f:
+        if f.description == "Forbidden: bot was blocked by the user":
+            print("Увага! Користувач {} заблокував бот".format(msg.chat.id))
+    except JSONDecodeError as g:
+        bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(g))    
 
 @bot.message_handler(commands=['check'])
 def check(msg):
