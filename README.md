@@ -14,7 +14,9 @@ docker run --name alarmbot -v ./data:/opt/alarmbot --restart="always" -d alarmbo
 
 Для оновлення даних (кожні 10 сек) використовується модуль Telethon у файлі client.py -> https://github.com/LonamiWebs/Telethon
 
-Файл client.py необхідно додати на виконання у crontab з такими параметрами -> * * * * * /path/to/client.py
+Файл client.py необхідно додати на виконання у crontab з такими параметрами -> * * * * * python3 /path/to/client.py (більш дієвий спосіб запустити цей файл на виконання у screen)
+
+Також на сервері, де запускається файл client.py бажано встановити 2 модулі python3 -> pip3 install python_socks та pip3 install async_timeout (щоб не отримувати помилку ConnectionError: Connection to Telegram failed 5 time(s))
 
 Для роботи з запитами до телеграму використовуються модулі http.client та telebot
 
