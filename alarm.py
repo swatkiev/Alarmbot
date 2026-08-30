@@ -35,7 +35,6 @@ def alarm(msg):
             data = res.read()
             responce = json.loads(data)
             newresponce = (responce['states']['м. Київ']['alertnow'])
-            print(newresponce)
             with open(responcefile, 'r') as fl:
                 oldresponce = json.load(fl)
             users_changed = False
