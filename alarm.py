@@ -30,7 +30,7 @@ def alarm(msg):
             users = json.load(fl2)
         conn = http.client.HTTPConnection("ubilling.net.ua")
         conn.request("GET", "/aerialalerts/")
-        res = conn.getresponse()
+        res = conn.getresponse()        
         if res.status == 200:
             data = res.read()
             responce = json.loads(data)
@@ -38,27 +38,40 @@ def alarm(msg):
             print(newresponce)
             with open(responcefile, 'r') as fl:
                 oldresponce = json.load(fl)
+            users_changed = False
             if (newresponce != oldresponce and newresponce == False):
                 with open(responcefile, 'w') as fl:
                     json.dump(newresponce, fl)
-                for id in users: # for every user that has start the bot
-                    bot.send_message(id, "{} Відбій повітряної тривоги Київ".format(emojigreen))
+                for id in list(users): 
+                    try:
+                        bot.send_message(id, "{} Відбій повітряної тривоги Київ".format(emojigreen))
+                    except ApiTelegramException as f:
+                        if f.description == "Forbidden: bot was blocked by the user":
+                            print("Увага! Користувач {} заблокував бот. Видаляю з бази...".format(id))
+                            users.remove(id)
+                            users_changed = True
             elif (newresponce != oldresponce and newresponce == True):
                   with open(responcefile, 'w') as fl:
                       json.dump(newresponce, fl)
-                  for id in users: # for every user that has start the bot
-                      bot.send_message(id, "{} Повітряна тривога Київ".format(emojired))
+                  for id in list(users): 
+                      try:
+                          bot.send_message(id, "{} Повітряна тривога Київ".format(emojired))
+                      except ApiTelegramException as f:
+                          if f.description == "Forbidden: bot was blocked by the user":
+                              print("Увага! Користувач {} заблокував бот. Видаляю з бази...".format(id))
+                              users.remove(id)
+                              users_changed = True
+            if users_changed:
+                with open(userdata, 'w') as fl2:
+                    json.dump(users, fl2)
         else:
-            bot.send_message(msg.chat.id, "На сервері сталася помилка HTTP: {}".format(res.status))
+            bot.send_message(msg.chat.id, "На сервері сталася помилка HTTP: {}".format(res.status))            
     except http.client.HTTPException as e:
         bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(e))
     except socket.timeout as t:
         bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(t))
-    except ApiTelegramException as f:
-        if f.description == "Forbidden: bot was blocked by the user":
-            print("Увага! Користувач {} заблокував бот".format(msg.chat.id))
     except JSONDecodeError as g:
-        bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(g))    
+        bot.send_message(msg.chat.id, "На сервері сталася помилка {}".format(g))   
 
 @bot.message_handler(commands=['check'])
 def check(msg):
