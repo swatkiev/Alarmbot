@@ -83,7 +83,20 @@ def check(msg):
     if newresponce == False:
         bot.send_message(msg.chat.id, "{} Зараз немає повітряної тривоги Київ".format(emojigreen))
     elif newresponce == True:
-        bot.send_message(msg.chat.id, "{} Зараз повітряна тривога Київ".format(emojired))
+        bot.send_message(msg.chat.id, "{} Зараз повітряна тривога Київ".format(emojired))        
+    conn2 = http.client.HTTPSConnection("neptun.in.ua")
+    conn2.request("GET", "/api/v1/threats")
+    res2 = conn2.getresponse()
+    data2 = res2.read()
+    responce2 = json.loads(data2)
+    is_alert_active = any(
+        threat.get("status") == "active" and threat.get("region") == "Київська область"
+        for threat in responce2.get("threats", [])
+    )
+    if is_alert_active:
+        bot.send_message(msg.chat.id, "{} Зараз повітряна тривога Київська область".format(emojired))
+    else:
+        bot.send_message(msg.chat.id, "{} Зараз немає повітряної тривоги Київська область".format(emojigreen))
 
 @bot.message_handler(commands=['unsub'])
 def unsub(msg):
